@@ -1,10 +1,10 @@
+import utils
+
 from pecan import expose, redirect
-from webob.exc import status_map
-from shortener.model import models
-from sqlalchemy.orm import sessionmaker
 
 from db_create import engine
-import utils
+from shortener.model import models
+from sqlalchemy.orm import sessionmaker
 
 
 Session = sessionmaker(bind=engine)
@@ -17,7 +17,12 @@ class RootController(object):
     def index(self):
         return dict()
 
-    @index.when(method='POST', template='json')
+    @expose()
+    def link(self, arg):
+        origin_link = utils.get_org_link_by_short_link(session, arg)
+        redirect(origin_link)
+
+    @index.when(method='POST', template='output.html')
     def index_post(self, o_link):
         s_link = utils.rand()
         record = models.Url(org_link=o_link, short_link=s_link)
@@ -26,19 +31,8 @@ class RootController(object):
             session.commit()
         except Exception as e:
             raise e
-        return {'short your link': utils.get_short_url(s_link)}
+        return dict(short_link=utils.get_short_url(s_link))
 
-    @expose()
-    def link(self, arg):
-        origin_link = utils.get_org_link_by_short_link(session, arg)
-        redirect(origin_link)
 
-    @expose('error.html')
-    def error(self, status):
-        try:
-            status = int(status)
-        except ValueError:  # pragma: no cover
-            status = 500
-        message = getattr(status_map.get(status), 'explanation', '')
-        return dict(status=status, message=message)
+
 

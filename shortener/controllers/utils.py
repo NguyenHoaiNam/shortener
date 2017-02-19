@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
-
 from __future__ import absolute_import, division
 from random import SystemRandom as SR
+
 from shortener.model import models
 
 import string
@@ -10,7 +10,6 @@ import config
 import socket
 
 logger = logging.getLogger(__name__)
-
 PROTOCOL = 'http://'
 PORT = config.server['port']
 
@@ -24,6 +23,9 @@ def rand():
 
 
 def get_ip():
+    """
+    This function is to get IP which is used to connect Internet
+    """
     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     s.connect(("8.8.8.8", 80))
     return s.getsockname()[0]
@@ -39,6 +41,11 @@ def get_short_url(short_url):
 
 
 def get_org_link_by_short_link(session, short_link):
-    for link in session.query(models.Url).filter_by(short_link=short_link):
-        origin_link = link.org_link
+    """
+    Get origin link from short link
+    :param session: this param is session to connect to database
+    :param short_link: Short link
+    """
+    origin_link = session.query.filter(models.Url.short_link ==
+                                       short_link).one()
     return origin_link

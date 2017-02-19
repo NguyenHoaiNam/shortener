@@ -1,2 +1,2 @@
-pecan
-sqlalchemy
+pecan==1.2.1
+SQLAlchemy==1.1.5

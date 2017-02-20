@@ -31,3 +31,11 @@ python setup.py develop
 ```
 pecan serve config.py
 ```
+
+### Demo
+
+- After running app. Access the app folows link: http://localhost:3007/ 
+
+- Copy a link to square and submit, after that we will receive a short link.
+
+- Now, we can access the link with a short link received.

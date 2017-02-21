@@ -1,5 +1,5 @@
 import utils
-
+import sqlite3
 from pecan import expose, redirect
 
 from db_create import engine
@@ -29,8 +29,8 @@ class RootController(object):
         try:
             session.add(record)
             session.commit()
-        except Exception as e:
-            raise e
+        except Exception:
+            s_link = utils.get_short_link_by_org_link(session, o_link)
         return dict(short_link=utils.get_short_url(s_link))
 
 

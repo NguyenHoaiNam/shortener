@@ -46,6 +46,12 @@ def get_org_link_by_short_link(session, short_link):
     :param session: this param is session to connect to database
     :param short_link: Short link
     """
-    origin_link = session.query.filter(models.Url.short_link ==
-                                       short_link).one()
-    return origin_link
+    origin_link = session.query(models.Url).filter(models.Url.short_link ==
+                                                   short_link).one()
+    return origin_link.org_link
+
+
+def get_short_link_by_org_link(session, org_link):
+    short_link = session.query(models.Url).filter(models.Url.org_link ==
+                                                  org_link).one()
+    return short_link.short_link
